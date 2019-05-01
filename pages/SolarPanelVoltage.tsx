@@ -3,7 +3,13 @@ import Header from "../components/Header";
 import ApiGraph from "../components/ApiGraph";
 import {StyleSheet, View} from 'react-native';
 
-export default class SolarPanelVoltage extends React.Component {
+interface Props {
+  isFontLoaded: boolean
+}
+
+interface State {}
+
+export default class SolarPanelVoltage extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
@@ -22,6 +28,5 @@ export default class SolarPanelVoltage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-  }
+  container: {}
 });

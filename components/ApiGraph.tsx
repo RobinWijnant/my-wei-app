@@ -1,7 +1,14 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-export default class ApiGraph extends React.Component {
+interface Props {
+  defaultTimeSpan: string;
+  defaultDate: string;
+}
+
+interface State {}
+
+export default class ApiGraph extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>

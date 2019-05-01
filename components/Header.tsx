@@ -1,7 +1,15 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, ImageSourcePropType, StyleSheet, Text, View} from 'react-native';
 
-export default class Header extends React.Component {
+interface Props {
+  isFontLoaded: boolean;
+  title: string;
+  img: ImageSourcePropType;
+}
+
+interface State {}
+
+export default class Header extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>

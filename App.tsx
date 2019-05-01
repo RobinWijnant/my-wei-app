@@ -3,8 +3,14 @@ import {Font} from "expo";
 import {StyleSheet, View} from 'react-native';
 import SolarPanelVoltage from "./pages/SolarPanelVoltage";
 
-export default class App extends React.Component {
-  state = {
+interface Props {}
+
+interface State {
+  isFontLoaded: boolean
+}
+
+export default class App extends React.Component<Props, State> {
+  state: State = {
     isFontLoaded: false,
   };
 
