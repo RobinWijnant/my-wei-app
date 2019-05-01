@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import {StyleSheet, View} from 'react-native';
 import DatePicker from "../components/DatePicker";
 import ApiGraph from "../components/ApiGraph";
+import Dropdown from "../components/Dropdown";
 
 interface Props {
 }
@@ -24,6 +25,12 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
           img={require('../assets/icons/solar-panel-voltage.png')}
         />
         <View style={styles.pickers}>
+          <Dropdown
+            defaultValue='day'
+            values={['day', 'week']}
+            onSelect={() => {}}
+            style={styles.dropdown}
+          />
           <DatePicker date={this.state.date} />
         </View>
         <ApiGraph />
@@ -39,7 +46,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     padding: 30,
   },
+
+  dropdown: {
+    marginRight: 20,
+  }
 });
