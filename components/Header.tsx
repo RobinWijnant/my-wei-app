@@ -27,14 +27,13 @@ export default class Header extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    height: 300,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
 
   leftContainer: {
-    flex: 1
+    flex: 1,
   },
 
   circle: {
@@ -51,14 +50,14 @@ const styles = StyleSheet.create({
     marginTop: 60,
     width: 40,
     height: 40,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
 
   title: {
     fontSize: 30,
     fontFamily: 'Lato Bold',
     marginLeft: 30,
-    marginTop: 30
+    marginTop: 30,
   },
 
   icon: {
@@ -66,6 +65,6 @@ const styles = StyleSheet.create({
     height: 300,
     marginTop: -55,
     marginRight: -70,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   }
 });
