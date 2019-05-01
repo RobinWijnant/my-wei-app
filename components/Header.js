@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 
 export default class Header extends React.Component {
   render() {
@@ -9,7 +9,7 @@ export default class Header extends React.Component {
           <View style={styles.circle}>
             <Image source={require('../assets/icons/menu.png')} style={styles.menuIcon} />
           </View>
-          <Text style={styles.title}>{this.props.title}</Text>
+          { this.props.isFontLoaded ? <Text style={styles.title}>{this.props.title}</Text> : null }
         </View>
         <Image source={this.props.img} style={styles.icon} />
       </View>
@@ -20,7 +20,6 @@ export default class Header extends React.Component {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    width: '100%',
     height: 300,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -28,6 +27,7 @@ const styles = StyleSheet.create({
   },
 
   leftContainer: {
+    flex: 1
   },
 
   circle: {
@@ -49,13 +49,16 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 30,
+    fontFamily: 'Lato Bold',
+    marginLeft: 30,
+    marginTop: 30
   },
 
   icon: {
-    width: 350,
-    height: 350,
-    marginTop: -100,
-    marginRight: -100,
+    width: 300,
+    height: 300,
+    marginTop: -55,
+    marginRight: -70,
     resizeMode: 'contain'
   }
 });

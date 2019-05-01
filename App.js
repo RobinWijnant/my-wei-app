@@ -1,14 +1,32 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import Header from "./components/Header";
+import {Font} from "expo";
+import {StyleSheet, View} from 'react-native';
+import SolarPanelVoltage from "./pages/SolarPanelVoltage";
 
 export default class App extends React.Component {
+  state = {
+    isFontLoaded: false,
+  };
+
   render() {
     return (
-      <Header title={''} img={require('./assets/icons/solar-panel-voltage.png')}/>
+      <View style={styles.container}>
+        <SolarPanelVoltage
+          isFontLoaded={this.state.isFontLoaded}
+        />
+      </View>
     );
+  }
+
+  componentDidMount() {
+    Font.loadAsync({
+      'Lato Bold': require('./assets/fonts/Lato-Bold.ttf'),
+    }).then(() => this.setState({ isFontLoaded: true }))
+      .catch(() => console.log('failed'));
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+  }
 });
