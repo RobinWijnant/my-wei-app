@@ -17,9 +17,7 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <SolarPanelVoltage
-          isFontLoaded={this.state.isFontLoaded}
-        />
+        {this.state.isFontLoaded && <SolarPanelVoltage/>}
       </View>
     );
   }

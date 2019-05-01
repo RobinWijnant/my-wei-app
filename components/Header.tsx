@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, ImageSourcePropType, StyleSheet, Text, View} from 'react-native';
 
 interface Props {
-  isFontLoaded: boolean;
   title: string;
   img: ImageSourcePropType;
 }
@@ -17,7 +16,7 @@ export default class Header extends React.Component<Props, State> {
           <View style={styles.circle}>
             <Image source={require('../assets/icons/menu.png')} style={styles.menuIcon} />
           </View>
-          { this.props.isFontLoaded ? <Text style={styles.title}>{this.props.title}</Text> : null }
+          <Text style={styles.title}>{this.props.title}</Text>
         </View>
         <Image source={this.props.img} style={styles.icon} />
       </View>
