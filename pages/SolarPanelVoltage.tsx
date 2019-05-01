@@ -2,6 +2,7 @@ import React from 'react';
 import Header from "../components/Header";
 import {StyleSheet, View} from 'react-native';
 import DatePicker from "../components/DatePicker";
+import ApiGraph from "../components/ApiGraph";
 
 interface Props {
 }
@@ -25,6 +26,7 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
         <View style={styles.pickers}>
           <DatePicker date={this.state.date} />
         </View>
+        <ApiGraph />
       </View>
     );
   }
