@@ -26,6 +26,7 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
         />
         <View style={styles.pickers}>
           <Dropdown
+            title={'Period'}
             defaultValue='day'
             values={['day', 'week']}
             onSelect={() => {}}

@@ -4,6 +4,7 @@ import DropdownUI from "./DropdownUI";
 import {capitalize} from "../utils/utils";
 
 interface Props {
+  title: string;
   defaultValue: string;
   values: string[];
   onSelect: (selectedValue: string) => void;
@@ -39,6 +40,7 @@ export default class Dropdown extends React.Component<Props, State> {
     return (
       <View style={this.props.style}>
         <DropdownUI
+          title={this.props.title}
           value={capitalize(this.state.selectedValue)}
           onTouchEnd={this.openModal.bind(this)}
         />

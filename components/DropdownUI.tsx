@@ -25,12 +25,13 @@ export default class DropdownUI extends React.Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
 
   title: {
     fontSize: 14,
     marginBottom: 5,
+    marginLeft: 8,
+    color: '#7D7D7D',
   },
 
   box: {
