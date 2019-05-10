@@ -36,7 +36,7 @@ export default class DatePicker extends React.Component<Props, State> {
       <View>
         { Platform.OS === 'android' && <DropdownUI
           value={formatDate(this.state.date)}
-          onTouched={this.openDatePicker.bind(this)}
+          onTouchEnd={this.openDatePicker.bind(this)}
         />}
         { Platform.OS === 'ios' && <DatePickerIOS
           date={this.state.date}

@@ -4,7 +4,7 @@ import {Ionicons} from '@expo/vector-icons';
 
 interface Props {
   value: string;
-  onTouched: () => void;
+  onTouchEnd: () => void;
 }
 
 interface State {}
@@ -12,7 +12,7 @@ interface State {}
 export default class DropdownUI extends React.Component<Props, State> {
   render() {
     return (
-      <View style={styles.container} onTouchEnd={this.props.onTouched}>
+      <View style={styles.container} onTouchEnd={this.props.onTouchEnd}>
         <Text style={styles.date}>{this.props.value}</Text>
         <Ionicons name="md-arrow-dropdown" size={24} color="#CECECE" />
       </View>
