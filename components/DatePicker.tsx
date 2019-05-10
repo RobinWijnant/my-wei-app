@@ -5,6 +5,7 @@ import DropdownUI from "./DropdownUI";
 
 interface Props {
   date: Date;
+  onSelect: (date: Date) => void;
 }
 
 interface State {
@@ -29,6 +30,7 @@ export default class DatePicker extends React.Component<Props, State> {
 
   private onDateSelected(date: Date) {
     this.setState({date: date});
+    this.props.onSelect(date);
   }
 
   render() {

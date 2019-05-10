@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import DatePicker from "../components/DatePicker";
 import ApiGraph from "../components/ApiGraph";
 import Dropdown from "../components/Dropdown";
+import {ChartData} from "../models/ChartData";
 
 interface Props {
 }
@@ -16,6 +17,20 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
   };
+
+  private getChartData(): ChartData {
+    return {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+      dataSets: [{
+        points: [ 20, 45, 28, 80, 99, 43 ],
+        color: {
+          red: 87,
+          green: 151,
+          blue: 225
+        }
+      }]
+    };
+  }
 
   render() {
     return (
@@ -32,9 +47,9 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
             onSelect={() => {}}
             style={styles.dropdown}
           />
-          <DatePicker date={this.state.date} />
+          <DatePicker date={this.state.date} onSelect={() => {}} />
         </View>
-        <ApiGraph />
+        <ApiGraph chartData={this.getChartData()} />
       </View>
     );
   }
@@ -49,6 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     padding: 30,
+    paddingBottom: 50,
   },
 
   dropdown: {

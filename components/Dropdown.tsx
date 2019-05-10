@@ -7,7 +7,7 @@ interface Props {
   title: string;
   defaultValue: string;
   values: string[];
-  onSelect: (selectedValue: string) => void;
+  onSelect: (value: string) => void;
   style: StyleProp<ViewStyle>;
 }
 
@@ -22,17 +22,17 @@ export default class Dropdown extends React.Component<Props, State> {
     modalVisible: false,
   };
 
-  private selectItem(selectedValue: string) {
+  private selectItem(selectedValue: string): void {
     this.setState({selectedValue: selectedValue});
     this.props.onSelect(this.state.selectedValue);
     this.closeModal();
   }
 
-  private openModal() {
+  private openModal(): void {
     this.setState({modalVisible: true});
   }
 
-  private closeModal() {
+  private closeModal(): void {
     this.setState({modalVisible: false});
   }
 
