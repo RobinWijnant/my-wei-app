@@ -10,15 +10,33 @@ interface Props {
 }
 
 interface State {
+  period: string;
   date: Date;
+  chartData: ChartData;
 }
 
 export default class SolarPanelVoltage extends React.Component<Props, State> {
   state: State = {
+    period: 'day',
     date: new Date(),
+    chartData: this.fetchChartData(),
   };
 
-  private getChartData(): ChartData {
+  private changeDate(date: Date) {
+    this.setState({
+      date: date,
+      chartData: this.fetchChartData(),
+    });
+  }
+
+  private changePeriod(period: string) {
+    this.setState({
+      period: period,
+      chartData: this.fetchChartData(),
+    });
+  }
+
+  private fetchChartData(): ChartData {
     return {
       labels: ['January', 'February', 'March', 'April', 'May', 'June'],
       dataSets: [{
@@ -42,14 +60,14 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
         <View style={styles.pickers}>
           <Dropdown
             title={'Period'}
-            defaultValue='day'
+            defaultValue={this.state.period}
             values={['day', 'week']}
-            onSelect={() => {}}
+            onSelect={this.changePeriod.bind(this)}
             style={styles.dropdown}
           />
-          <DatePicker date={this.state.date} onSelect={() => {}} />
+          <DatePicker date={this.state.date} onSelect={this.changeDate.bind(this)} />
         </View>
-        <ApiGraph chartData={this.getChartData()} />
+        <ApiGraph chartData={this.state.chartData} />
       </View>
     );
   }
