@@ -5,49 +5,54 @@ import DatePicker from "../components/DatePicker";
 import ApiGraph from "../components/ApiGraph";
 import Dropdown from "../components/Dropdown";
 import {ChartData} from "../models/ChartData";
+import moment, {Moment} from "moment";
+import MyWeiApiService from "../services/MyWeiApiService";
+import {ChartDataBuilder} from "../utils/ChartDataBuilder";
 
 interface Props {
 }
 
 interface State {
   period: string;
-  date: Date;
+  date: Moment;
   chartData: ChartData;
 }
 
 export default class SolarPanelVoltage extends React.Component<Props, State> {
   state: State = {
     period: 'day',
-    date: new Date(),
-    chartData: this.fetchChartData(),
+    date: moment(),
+    chartData: {
+      labels: [],
+      dataSets: [],
+    },
   };
 
-  private changeDate(date: Date) {
-    this.setState({
-      date: date,
-      chartData: this.fetchChartData(),
-    });
+  constructor(props: Props) {
+    super(props);
+    this.createChartData(this.state.period, this.state.date)
+      .then((chartData: ChartData) => this.setState({chartData: chartData}));
+  }
+
+  private changeDate(date: Moment) {
+    this.createChartData(this.state.period, date)
+      .then((chartData: ChartData) => this.setState({
+        date: date,
+        chartData: chartData,
+      }));
   }
 
   private changePeriod(period: string) {
-    this.setState({
-      period: period,
-      chartData: this.fetchChartData(),
-    });
+    this.createChartData(period, this.state.date)
+      .then((chartData: ChartData) => this.setState({
+        period: period,
+        chartData: chartData
+      }));
   }
 
-  private fetchChartData(): ChartData {
-    return {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-      dataSets: [{
-        points: [ 20, 45, 28, 80, 99, 43 ],
-        color: {
-          red: 87,
-          green: 151,
-          blue: 225
-        }
-      }]
-    };
+  private async createChartData(period: string, date: Moment): Promise<ChartData> {
+    const readings = await MyWeiApiService.getSolarPanelVoltages(period, date);
+    return new ChartDataBuilder().setReadings(readings).build();
   }
 
   render() {

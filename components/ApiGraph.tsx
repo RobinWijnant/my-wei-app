@@ -1,17 +1,23 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 // @ts-ignore
-import { LineChart } from 'react-native-chart-kit';
+import {LineChart} from 'react-native-chart-kit';
 import {ChartData} from "../models/ChartData";
 import {ChartDataSet} from "../models/ChartDataSet";
 import {Color} from "../models/Color";
+import {LineChartData} from "../models/LineChartData";
 
 interface Props {
   chartData: ChartData;
 }
-interface State {}
+interface State {
+}
 
 export default class ApiGraph extends React.Component<Props, State> {
+
+  constructor(props: Props) {
+    super(props);
+  }
 
   private config = {
     backgroundColor: '#FFFFFF',
@@ -21,25 +27,20 @@ export default class ApiGraph extends React.Component<Props, State> {
     strokeWidth: 2 // optional, default 3
   };
 
-  private data = {
-    labels: this.getLabels(),
-    datasets: this.getRefactoredDataSets()
-  };
-
-  private getLabels(): string[] {
-    return this.props.chartData.labels;
+  private getLineChartData(): LineChartData {
+    return {
+      labels: this.props.chartData.labels,
+      datasets: this.refactorDataSets()
+    };
   }
 
-  private getRefactoredDataSets(): any {
-    const chartRefactoredDataSets: {}[] = [];
-    this.props.chartData.dataSets.forEach((dataSet: ChartDataSet) => {
-      const chartRefactored: {data: number[], color: (opacity: number) => string} = {
+  private refactorDataSets(): LineChartData['datasets'] {
+    return this.props.chartData.dataSets.map((dataSet: ChartDataSet) => {
+      return {
         data: dataSet.points,
         color: (opacity = 1) => this.createRgbaString(dataSet.color, opacity)
       };
-      chartRefactoredDataSets.push(chartRefactored);
     });
-    return chartRefactoredDataSets;
   }
 
   private createRgbaString(color : Color, opacity: number): string {
@@ -47,15 +48,17 @@ export default class ApiGraph extends React.Component<Props, State> {
   }
 
   render() {
+    const lineChartData = this.getLineChartData();
+    const isChartDataReady = Boolean(lineChartData.datasets.length > 0);
     return (
       <View style={styles.container}>
-        <LineChart
-          data={this.data}
+        { isChartDataReady && <LineChart
+          data={lineChartData}
           width={Dimensions.get('window').width - 40}
           height={300}
           chartConfig={this.config}
           bezier
-        />
+        /> }
       </View>
     );
   }

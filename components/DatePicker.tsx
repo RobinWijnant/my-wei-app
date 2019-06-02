@@ -1,15 +1,15 @@
 import React from 'react';
 import {DatePickerAndroid, DatePickerAndroidOpenReturn, DatePickerIOS, Platform, View} from 'react-native';
-import {formatDate} from "../utils/utils";
 import DropdownUI from "./DropdownUI";
+import moment, {Moment} from "moment";
 
 interface Props {
-  date: Date;
-  onSelect: (date: Date) => void;
+  date: Moment;
+  onSelect: (date: Moment) => void;
 }
 
 interface State {
-  date: Date;
+  date: Moment;
 }
 
 export default class DatePicker extends React.Component<Props, State> {
@@ -19,7 +19,7 @@ export default class DatePicker extends React.Component<Props, State> {
 
   private async openDatePicker() {
     try {
-      const result: DatePickerAndroidOpenReturn = await DatePickerAndroid.open({date: this.state.date});
+      const result: DatePickerAndroidOpenReturn = await DatePickerAndroid.open({date: this.state.date.toDate()});
       if (result.action === DatePickerAndroid.dateSetAction && result.year && result.month && result.day) {
         this.onDateSelected(new Date(result.year, result.month, result.day))
       }
@@ -29,8 +29,9 @@ export default class DatePicker extends React.Component<Props, State> {
   }
 
   private onDateSelected(date: Date) {
-    this.setState({date: date});
-    this.props.onSelect(date);
+    const momentDate = moment(date);
+    this.setState({date: momentDate});
+    this.props.onSelect(momentDate);
   }
 
   render() {
@@ -38,11 +39,11 @@ export default class DatePicker extends React.Component<Props, State> {
       <View>
         { Platform.OS === 'android' && <DropdownUI
           title={'Date'}
-          value={formatDate(this.state.date)}
+          value={this.state.date.format('DD-MM-YYYY')}
           onTouchEnd={this.openDatePicker.bind(this)}
         />}
         { Platform.OS === 'ios' && <DatePickerIOS
-          date={this.state.date}
+          date={this.state.date.toDate()}
           onDateChange={this.onDateSelected}
         />}
       </View>
