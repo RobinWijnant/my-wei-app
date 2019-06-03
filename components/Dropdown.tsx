@@ -24,7 +24,7 @@ export default class Dropdown extends React.Component<Props, State> {
 
   private selectItem(selectedValue: string): void {
     this.setState({selectedValue: selectedValue});
-    this.props.onSelect(this.state.selectedValue);
+    this.props.onSelect(selectedValue);
     this.closeModal();
   }
 
