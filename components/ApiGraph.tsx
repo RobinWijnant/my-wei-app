@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import {LineChart} from 'react-native-chart-kit';
 import {ChartData} from "../models/ChartData";
@@ -49,16 +49,17 @@ export default class ApiGraph extends React.Component<Props, State> {
 
   render() {
     const lineChartData = this.getLineChartData();
-    const isChartDataReady = Boolean(lineChartData.datasets.length > 0);
+    const chartDataAvailable = Boolean(lineChartData.labels.length > 0);
     return (
       <View style={styles.container}>
-        { isChartDataReady && <LineChart
+        { chartDataAvailable && <LineChart
           data={lineChartData}
           width={Dimensions.get('window').width - 40}
           height={300}
           chartConfig={this.config}
           bezier
         /> }
+        { !chartDataAvailable && <Text style={styles.text}>No data available</Text> }
       </View>
     );
   }
@@ -67,6 +68,16 @@ export default class ApiGraph extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    width: '100%',
+    height: 300,
     marginLeft: 10,
+    marginRight: 10,
+  },
+
+  text: {
+    textAlign: 'center',
+    marginTop: 100,
+    marginLeft: -10,
+    color: 'grey',
   },
 });
