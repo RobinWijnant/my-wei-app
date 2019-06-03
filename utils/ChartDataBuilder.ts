@@ -1,9 +1,10 @@
 import {ChartData} from "../models/ChartData";
-import {Reading} from "../models/Reading";
 import moment, {Moment} from "moment";
+import {Color} from "../models/Color";
 
 export class ChartDataBuilder {
   private readonly chartData: ChartData;
+  private readonly MAX_LABELS = 7;
 
   constructor() {
     this.chartData = this.createInitialChartData();
@@ -16,25 +17,32 @@ export class ChartDataBuilder {
     }
   }
 
-  public setReadings(readings: Reading[]): ChartDataBuilder {
-    this.chartData.labels = this.createLabels(readings.map((reading: Reading) => reading.dateTime));
-    this.chartData.dataSets.push({
-      points: readings.map((reading: Reading) => reading.value),
-      color: {
-        red: 87,
-        green: 151,
-        blue: 225
-      }
-    });
+  public setLabels(dates: Moment[]): ChartDataBuilder {
+    let labelDates: Moment[] = [];
+
+    if (dates.length <= 7) {
+      labelDates = [...dates];
+    } else {
+      labelDates = [...Array(this.MAX_LABELS).keys()].map((val: number, index: number) => {
+        const datesIndex = Math.floor(dates.length / (this.MAX_LABELS) * index);
+        return dates[datesIndex];
+        });
+    }
+
+    if (moment.min(labelDates).add(1, 'days').isBefore(moment.max(labelDates))) {
+      this.chartData.labels = labelDates.map((date: Moment) => date.format('DD/MM'));
+    } else {
+      this.chartData.labels = labelDates.map((date: Moment) => date.format('HH:mm'));
+    }
     return this;
   }
 
-  private createLabels(dates: Moment[]): string[] {
-    if (moment.min(dates).add(1, 'days').isBefore(moment.max(dates))) {
-      return dates.map((date: Moment) => date.format('DD/MM'));
-    } else {
-      return dates.map((date: Moment) => date.format('HH:mm'));
-    }
+  public addDataPoints(points: number[], color: Color): ChartDataBuilder {
+    this.chartData.dataSets.push({
+      points: points,
+      color: color,
+    });
+    return this;
   }
 
   public build(): ChartData {
