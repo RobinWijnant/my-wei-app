@@ -7,6 +7,7 @@ enum SwitchStatus {
 }
 
 interface Props {
+  defaultStatus: Promise<boolean>;
   onSwitch: (switchedOn: boolean) => Promise<boolean>;
   style?: StyleProp<ViewStyle>;
 }
@@ -20,7 +21,15 @@ export default class AlarmSwitch extends React.Component<Props, State> {
     switchStatus: SwitchStatus.Off,
   };
 
+  constructor(props: Props) {
+    super(props);
+    this.props.defaultStatus.then((switchedOn: boolean) => this.setState({
+      switchStatus: switchedOn ? SwitchStatus.On : SwitchStatus.Off
+    }));
+  }
+
   private onToggle(): void {
+    if (this.state.switchStatus === SwitchStatus.Switching) return;
     this.setState({switchStatus: SwitchStatus.Switching});
     const switchStatusBoolean = this.state.switchStatus === SwitchStatus.On;
     this.props.onSwitch(!switchStatusBoolean)

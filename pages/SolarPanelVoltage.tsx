@@ -21,6 +21,7 @@ interface State {
   date: Moment;
   chartData: ChartData;
   chartLoaded: boolean;
+  defaultSwitchStatus: Promise<boolean>,
 }
 
 export default class SolarPanelVoltage extends React.Component<Props, State> {
@@ -32,12 +33,21 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
       dataSets: [],
     },
     chartLoaded: false,
+    defaultSwitchStatus: this.getDefaultSwitchStatus(),
   };
 
   constructor(props: Props) {
     super(props);
+
     this.createChartData(this.state.period, this.state.date)
       .then((chartData: ChartData) => this.setState({chartData: chartData, chartLoaded: true}));
+  }
+
+  private getDefaultSwitchStatus(): Promise<boolean> {
+    return NotificationService.checkRegistrations()
+      .then((types: MyWeiType[]) => {
+        return types.findIndex((type: MyWeiType) => type === MyWeiType.SolarPanelVoltage) > -1;
+      });
   }
 
   private changeDate(date: Moment): void {
@@ -70,9 +80,9 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
 
   private async toggleAlarm(alarmOn: boolean): Promise<boolean> {
     if (alarmOn) {
-      return NotificationService.register(MyWeiType.SolarPanelVoltage);
+      return await NotificationService.register(MyWeiType.SolarPanelVoltage);
     } else {
-      return !NotificationService.unregister(MyWeiType.SolarPanelVoltage);
+      return !(await NotificationService.unregister(MyWeiType.SolarPanelVoltage));
     }
   }
 
@@ -91,13 +101,13 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
             onSelect={this.changePeriod.bind(this)}
             style={styles.picker}
           />
-          <DatePicker style={styles.picker} date={this.state.date} onSelect={this.changeDate.bind(this)} />
-          <AlarmSwitch onSwitch={this.toggleAlarm} />
+          <DatePicker style={styles.picker} date={this.state.date} onSelect={this.changeDate.bind(this)}/>
+          <AlarmSwitch defaultStatus={this.state.defaultSwitchStatus} onSwitch={this.toggleAlarm}/>
         </View>
-        { !this.state.chartLoaded && <View style={styles.loadingContainer} >
-          <Image source={require('../assets/icons/loading.gif')} style={styles.loading} />
-        </View> }
-        { this.state.chartLoaded && <ApiGraph chartData={this.state.chartData} /> }
+        {!this.state.chartLoaded && <View style={styles.loadingContainer}>
+          <Image source={require('../assets/icons/loading.gif')} style={styles.loading}/>
+        </View>}
+        {this.state.chartLoaded && <ApiGraph chartData={this.state.chartData}/>}
       </View>
     );
   }

@@ -2,7 +2,7 @@ import environment from "../config/environment";
 import {Notifications, Permissions} from "expo";
 import {MyWeiType} from "../models/MyWeiType";
 
-const ENDPOINT = environment.api.url + 'expo/register';
+const ENDPOINT = environment.api.url + 'expo';
 
 async function getToken(): Promise<string | null> {
   const { status: existingStatus } = await Permissions.getAsync(
@@ -11,16 +11,17 @@ async function getToken(): Promise<string | null> {
   let finalStatus = existingStatus;
 
   if (existingStatus !== 'granted') {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS); // happens only in IOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS); // happens only in IOS on click
     finalStatus = status;
   }
 
-  if (finalStatus !== 'granted') {
-    console.log('permissions not granted');
+  if (finalStatus !== 'granted') return null;
+
+  try {
+    return await Notifications.getExpoPushTokenAsync();
+  } catch(error) {
     return null;
   }
-
-  return Notifications.getExpoPushTokenAsync();
 }
 
 export default {
@@ -29,7 +30,7 @@ export default {
     if (token === null) return false;
 
     try {
-      const response = await fetch(ENDPOINT, {
+      const response = await fetch(ENDPOINT + '/register', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -40,18 +41,39 @@ export default {
           myWeiType: myWeiType
         }),
       });
-      return response.status === 200 || response.status === 201;
+      return response.status === 200;
     } catch(error) {
       return false;
     }
   },
 
   async unregister(myWeiType: MyWeiType): Promise<boolean> {
-    let token = await Notifications.getExpoPushTokenAsync();
-    return true;
+    try {
+      const token =  await Notifications.getExpoPushTokenAsync();
+      const response = await fetch(ENDPOINT + '/unregister', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: token,
+          myWeiType: myWeiType
+        }),
+      });
+      return response.status === 200;
+    } catch(error) {
+      return false;
+    }
   },
 
-  async isRegistered(myWeiType: MyWeiType): Promise<boolean> {
-    return true;
+  async checkRegistrations(): Promise<MyWeiType[]> {
+    try {
+      const token =  await getToken();
+      const response = await fetch(ENDPOINT + '/registrations/' + token);
+      return await response.json() as MyWeiType[];
+    } catch(error) {
+      return [];
+    }
   }
 };
