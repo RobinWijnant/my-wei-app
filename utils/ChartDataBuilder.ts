@@ -1,5 +1,5 @@
 import {ChartData} from "../models/ChartData";
-import moment, {Moment} from "moment";
+import {Moment} from "moment";
 import {Color} from "../models/Color";
 
 export class ChartDataBuilder {
@@ -17,7 +17,7 @@ export class ChartDataBuilder {
     }
   }
 
-  public setLabels(dates: Moment[]): ChartDataBuilder {
+  public setLabels(dates: Moment[], period: string): ChartDataBuilder {
     let labelDates: Moment[] = [];
 
     if (dates.length <= 7) {
@@ -29,10 +29,15 @@ export class ChartDataBuilder {
         });
     }
 
-    if (moment.min(labelDates).add(1, 'days').isBefore(moment.max(labelDates))) {
-      this.chartData.labels = labelDates.map((date: Moment) => date.format('DD/MM'));
-    } else {
-      this.chartData.labels = labelDates.map((date: Moment) => date.format('HH:mm'));
+    switch (period) {
+      case 'week':
+        this.chartData.labels = labelDates.map((date: Moment) => date.format('DD/MM'));
+        break;
+      case 'day':
+        this.chartData.labels = labelDates.map((date: Moment) => date.format('HH:mm'));
+        break;
+      default:
+        this.chartData.labels = ['Invalid labels'];
     }
     return this;
   }

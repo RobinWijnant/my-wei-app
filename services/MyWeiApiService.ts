@@ -24,7 +24,11 @@ function fetchReadings(url: string): Promise<Reading[]> {
 export default {
   async getSolarPanelVoltages(period: string, date: Moment): Promise<Reading[]> {
     const url = environment.api.url + 'readings/' + environment.api.deviceUuid + '/solarPanelVoltage?' +
-      ApiService.createQueryParameterString({timeSpan: period, date: date.format('YYYY-MM-DD')});
+      ApiService.createQueryParameterString({
+        timeSpan: period,
+        date: date.format('YYYY-MM-DD'),
+        utcOffset: String(Math.floor(new Date().getTimezoneOffset() / 60 * -1)),
+      });
 
     return fetchReadings(url);
   }

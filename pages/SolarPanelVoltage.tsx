@@ -9,6 +9,9 @@ import moment, {Moment} from "moment";
 import MyWeiApiService from "../services/MyWeiApiService";
 import {ChartDataBuilder} from "../utils/ChartDataBuilder";
 import {Reading} from "../models/Reading";
+import AlarmSwitch from "../components/AlarmSwitch";
+import NotificationService from "../services/NotificationService";
+import {MyWeiType} from "../models/MyWeiType";
 
 interface Props {
 }
@@ -60,9 +63,17 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
   private async createChartData(period: string, date: Moment): Promise<ChartData> {
     const readings = await MyWeiApiService.getSolarPanelVoltages(period, date);
     return new ChartDataBuilder()
-      .setLabels(readings.map((reading: Reading) => reading.dateTime))
+      .setLabels(readings.map((reading: Reading) => reading.dateTime), period)
       .addDataPoints(readings.map((reading: Reading) => reading.value), {red: 87, green: 151, blue: 225})
       .build();
+  }
+
+  private async toggleAlarm(alarmOn: boolean): Promise<boolean> {
+    if (alarmOn) {
+      return NotificationService.register(MyWeiType.SolarPanelVoltage);
+    } else {
+      return !NotificationService.unregister(MyWeiType.SolarPanelVoltage);
+    }
   }
 
   render() {
@@ -78,9 +89,10 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
             defaultValue={this.state.period}
             values={['day', 'week']}
             onSelect={this.changePeriod.bind(this)}
-            style={styles.dropdown}
+            style={styles.picker}
           />
-          <DatePicker date={this.state.date} onSelect={this.changeDate.bind(this)} />
+          <DatePicker style={styles.picker} date={this.state.date} onSelect={this.changeDate.bind(this)} />
+          <AlarmSwitch onSwitch={this.toggleAlarm} />
         </View>
         { !this.state.chartLoaded && <View style={styles.loadingContainer} >
           <Image source={require('../assets/icons/loading.gif')} style={styles.loading} />
@@ -116,7 +128,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-  dropdown: {
-    marginRight: 20,
-  }
+  picker: {
+    marginRight: 12,
+  },
 });

@@ -1,11 +1,20 @@
 import React from 'react';
-import {DatePickerAndroid, DatePickerAndroidOpenReturn, DatePickerIOS, Platform, View} from 'react-native';
+import {
+  DatePickerAndroid,
+  DatePickerAndroidOpenReturn,
+  DatePickerIOS,
+  Platform,
+  StyleProp,
+  View,
+  ViewStyle
+} from 'react-native';
 import DropdownUI from "./DropdownUI";
 import moment, {Moment} from "moment";
 
 interface Props {
   date: Moment;
   onSelect: (date: Moment) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 interface State {
@@ -36,7 +45,7 @@ export default class DatePicker extends React.Component<Props, State> {
 
   render() {
     return (
-      <View>
+      <View style={this.props.style}>
         { Platform.OS === 'android' && <DropdownUI
           title={'Date'}
           value={this.state.date.format('DD-MM-YYYY')}

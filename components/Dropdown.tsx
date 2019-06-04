@@ -8,7 +8,7 @@ interface Props {
   defaultValue: string;
   values: string[];
   onSelect: (value: string) => void;
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 interface State {

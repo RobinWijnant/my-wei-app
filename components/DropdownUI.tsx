@@ -16,7 +16,7 @@ export default class DropdownUI extends React.Component<Props, State> {
       <View style={styles.container}>
         <Text style={styles.title}>{this.props.title}</Text>
         <View style={styles.box} onTouchEnd={this.props.onTouchEnd}>
-          <Text style={styles.date}>{this.props.value}</Text>
+          <Text style={styles.value}>{this.props.value}</Text>
           <Ionicons name="md-arrow-dropdown" size={24} color="#CECECE" />
         </View>
       </View>
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     borderColor: '#CECECE',
   },
 
-  date: {
+  value: {
     color: '#7D7D7D',
     fontSize: 16,
     fontFamily: 'Lato Bold',
-    marginRight: 15,
+    marginRight: 10,
   },
 });
