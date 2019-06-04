@@ -24,7 +24,7 @@ interface State {
   defaultSwitchStatus: Promise<boolean>,
 }
 
-export default class SolarPanelVoltage extends React.Component<Props, State> {
+export default class BatteryVoltage extends React.Component<Props, State> {
   state: State = {
     period: 'day',
     date: moment(),
@@ -46,7 +46,7 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
   private getDefaultSwitchStatus(): Promise<boolean> {
     return NotificationService.checkRegistrations()
       .then((types: MyWeiType[]) => {
-        return types.findIndex((type: MyWeiType) => type === MyWeiType.SolarPanelVoltage) > -1;
+        return types.findIndex((type: MyWeiType) => type === MyWeiType.BatteryVoltage) > -1;
       });
   }
 
@@ -71,7 +71,7 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
   }
 
   private async createChartData(period: string, date: Moment): Promise<ChartData> {
-    const readings = await MyWeiApiService.getSolarPanelVoltages(period, date);
+    const readings = await MyWeiApiService.getValues(MyWeiType.BatteryVoltage, period, date);
     return new ChartDataBuilder()
       .setLabels(readings.map((reading: Reading) => reading.dateTime), period)
       .addDataPoints(readings.map((reading: Reading) => reading.value), {red: 87, green: 151, blue: 225})
@@ -80,9 +80,9 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
 
   private async toggleAlarm(alarmOn: boolean): Promise<boolean> {
     if (alarmOn) {
-      return await NotificationService.register(MyWeiType.SolarPanelVoltage);
+      return await NotificationService.register(MyWeiType.BatteryVoltage);
     } else {
-      return !(await NotificationService.unregister(MyWeiType.SolarPanelVoltage));
+      return !(await NotificationService.unregister(MyWeiType.BatteryVoltage));
     }
   }
 
@@ -90,7 +90,7 @@ export default class SolarPanelVoltage extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <Header
-          title={'Solar panel voltage'}
+          title={'Battery voltage'}
           img={require('../assets/icons/solar-panel-voltage.png')}
         />
         <View style={styles.pickers}>

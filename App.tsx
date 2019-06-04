@@ -1,7 +1,7 @@
 import React from 'react';
 import {Font} from "expo";
 import {StyleSheet, View} from 'react-native';
-import SolarPanelVoltage from "./pages/SolarPanelVoltage";
+import BatteryVoltage from "./pages/BatteryVoltage";
 
 interface Props {}
 
@@ -17,7 +17,7 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.isFontLoaded && <SolarPanelVoltage/>}
+        {this.state.isFontLoaded && <BatteryVoltage/>}
       </View>
     );
   }
