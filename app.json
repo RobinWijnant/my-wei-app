@@ -23,7 +23,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "me.wijnant.mywei"
+    },
+    "android": {
+      "package": "me.wijnant.mywei"
+    },
+    "description": "App which loads a chart of API data and uses filters"
   }
 }
