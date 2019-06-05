@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
 
   switchSwitching: {
-    borderColor: '#e1b357',
+    borderColor: '#FFB45B',
   },
 
   statusText: {

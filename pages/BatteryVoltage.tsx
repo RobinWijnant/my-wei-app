@@ -74,7 +74,8 @@ export default class BatteryVoltage extends React.Component<Props, State> {
     const readings = await MyWeiApiService.getValues(MyWeiType.BatteryVoltage, period, date);
     return new ChartDataBuilder()
       .setLabels(readings.map((reading: Reading) => reading.dateTime), period)
-      .addDataPoints(readings.map((reading: Reading) => reading.value), {red: 87, green: 151, blue: 225})
+
+      .addDataPoints(readings.map((reading: Reading) => reading.value), {red: 225, green: 87, blue: 87})
       .build();
   }
 
@@ -91,7 +92,7 @@ export default class BatteryVoltage extends React.Component<Props, State> {
       <View style={styles.container}>
         <Header
           title={'Battery voltage'}
-          img={require('../assets/icons/solar-panel-voltage.png')}
+          img={require('../assets/icons/battery-voltage.png')}
         />
         <View style={styles.pickers}>
           <Dropdown
